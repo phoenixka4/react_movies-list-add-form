@@ -21,6 +21,24 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   const [imdbUrl, setImdbUrl] = useState('');
   const [imdbId, setImdbId] = useState('');
 
+  const [errors, setErrors] = useState({
+    title: false,
+    imgUrl: false,
+    imdbUrl: false,
+    imdbId: false,
+  });
+
+  const validateField = (fieldName: string, value: string) => {
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      [fieldName]: !value.trim(),
+    }));
+  };
+
+  const handleBlur = (fieldName: string, value: string) => {
+    validateField(fieldName, value);
+  };
+
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
 
@@ -59,11 +77,11 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
     }
 
     onAdd({
-      title,
-      description,
-      imgUrl,
-      imdbUrl,
-      imdbId,
+      title: title.trim(),
+      description: description.trim(),
+      imgUrl: imgUrl.trim(),
+      imdbUrl: imdbUrl.trim(),
+      imdbId: imdbId.trim(),
     });
 
     setCount(count + 1);
@@ -89,6 +107,8 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             target: { value: newValue },
           } as React.ChangeEvent<HTMLInputElement>)
         }
+        onBlur={() => handleBlur('title', title)}
+        error={errors.title}
         required
       />
 
@@ -112,6 +132,8 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             target: { value: newValue },
           } as React.ChangeEvent<HTMLInputElement>)
         }
+        onBlur={() => handleBlur('imgUrl', imgUrl)}
+        error={errors.imgUrl}
         required
       />
 
@@ -124,6 +146,8 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             target: { value: newValue },
           } as React.ChangeEvent<HTMLInputElement>)
         }
+        onBlur={() => handleBlur('imdbUrl', imdbUrl)}
+        error={errors.imdbUrl}
         required
       />
 
@@ -136,6 +160,8 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
             target: { value: newValue },
           } as React.ChangeEvent<HTMLInputElement>)
         }
+        onBlur={() => handleBlur('imdbId', imdbId)}
+        error={errors.imdbId}
         required
       />
 
